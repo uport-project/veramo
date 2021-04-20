@@ -78,9 +78,14 @@ export interface ICreateVerifiablePresentationArgs {
   save?: boolean
 
   /**
-   * Optional string challenge parameter to add to the verifiable presentation.
+   * Optional (only JWT) string challenge parameter to add to the verifiable presentation.
    */
   challenge?: string
+
+  /**
+   * Optional string domain parameter to add to the verifiable presentation.
+   */
+  domain?: string
 
   /**
    * The desired format for the VerifiablePresentation to be created.
@@ -181,12 +186,31 @@ export interface IVerifyVerifiablePresentationArgs {
    * of the `credential`
    *
    */
-  presentation: VerifiablePresentation
+  presentation: {
+    id?: string
+    holder: string
+    // issuanceDate?: string
+    // expirationDate?: string
+    '@context': string[]
+    type: string[]
+    // verifier: string[]
+    verifiableCredential: VerifiableCredential[]
+    proof: {
+      type?: string
+      [x: string]: any
+    }
+    [x: string]: any
+  }
 
   /**
-   * Optional string challenge parameter to verify the verifiable presentation against
+   * Optional (only for JWT) string challenge parameter to verify the verifiable presentation against
    */
   challenge?: string
+
+  /**
+   * Optional (only for JWT) string domain parameter to verify the verifiable presentation against
+   */
+  domain?: string
 }
 
 /**
@@ -381,6 +405,15 @@ const issueLDVerifiableCredential = async (
   const suite = getLDSigningSuite(key, identifier)
   const documentLoader = getDocumentLoader(context)
 
+  // some suites are misssisng the right contexts
+  switch (suite.type) {
+    case "EcdsaSecp256k1RecoverySignature2020":
+      console.log(`Adding context to credential ${suite.type}`)
+      credential['@context'].push('https://identity.foundation/EcdsaSecp256k1RecoverySignature2020/lds-ecdsa-secp256k1-recovery2020-0.0.jsonld')
+      break
+    default:
+  }
+
   return await vc.issue({
     credential,
     suite,
@@ -393,17 +426,30 @@ const signLDVerifiablePresentation = async (
   presentation: W3CPresentation,
   key: IKey,
   challenge: string | undefined,
+  domain: string | undefined,
   identifier: IIdentifier,
   context: IContext
 ): Promise<VerifiablePresentation> => {
 
   const suite = getLDSigningSuite(key, identifier)
   const documentLoader = getDocumentLoader(context)
+
+  // TODO: Remove invalid field 'verifiers' from Presentation. Needs to be adapted for LD credentials
+  // Only remove empty array (vc.signPresentation will throw then)
+  const sanitizedPresentation = presentation as any
+  if (sanitizedPresentation.verifier.length == 0) {
+    delete sanitizedPresentation.verifier
+  }
+
+
   return await vc.signPresentation({
-    presentation,
+    presentation: sanitizedPresentation,
     suite,
     challenge,
-    documentLoader
+    domain,
+    documentLoader,
+    purpose: new AssertionProofPurpose(),
+    compactProof: false
   })
 }
 
@@ -439,7 +485,6 @@ export class CredentialIssuer implements IAgentPlugin {
         '@context': args.presentation['@context'] || ['https://www.w3.org/2018/credentials/v1'],
         //FIXME: make sure 'VerifiablePresentation' is the first element in this array:
         type: args.presentation.type || ['VerifiablePresentation'],
-        issuanceDate: args.presentation.issuanceDate || new Date().toISOString(),
       }
 
       //FIXME: if the identifier is not found, the error message should reflect that.
@@ -456,9 +501,14 @@ export class CredentialIssuer implements IAgentPlugin {
         }
 
         const keyPayload = await context.agent.keyManagerGet({ kid: key.kid })
-        return signLDVerifiablePresentation(presentation, keyPayload, args.challenge, identifier, context)
+        return signLDVerifiablePresentation(presentation,
+          keyPayload, args.challenge, args.domain, identifier, context)
       }
       //------------------------- END JSON_LD INSERT
+      else {
+        // only add issuanceDate for JWT
+        presentation.issuanceDate = args.presentation.issuanceDate || new Date().toISOString()
+      }
 
       //FIXME: Throw an `unsupported_format` error if the `args.proofFormat` is not `jwt`
       const signer = (data: string | Uint8Array) => context.agent.keyManagerSignJWT({ kid: key.kid, data })
@@ -588,6 +638,7 @@ export class CredentialIssuer implements IAgentPlugin {
       suite: [new EcdsaSecp256k1RecoverySignature2020(), new Ed25519Signature2020()],
       documentLoader: getDocumentLoader(context),
       challenge: args.challenge,
+      domain: args.domain,
       purpose: new AssertionProofPurpose(),
       compactProof: false
     });

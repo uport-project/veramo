@@ -14,10 +14,12 @@ export default (testContext: {
     let ethrIdentifier: IIdentifier
     let keyE256KIdentifier: IIdentifier
     let storedCredentialHash: string
+    let challenge: string
 
     beforeAll(() => {
       testContext.setup()
       agent = testContext.getAgent()
+      challenge = 'TEST_CHALLENGE_STRING'
     })
     afterAll(testContext.tearDown)
 
@@ -58,6 +60,7 @@ export default (testContext: {
       expect(verifiableCredential['@context']).toEqual([
         'https://www.w3.org/2018/credentials/v1',
         'https://veramo.io/contexts/profile/v1',
+        'https://identity.foundation/EcdsaSecp256k1RecoverySignature2020/lds-ecdsa-secp256k1-recovery2020-0.0.jsonld'
       ])
       expect(verifiableCredential['type']).toEqual(
         ['VerifiableCredential', 'Profile'])
@@ -80,6 +83,53 @@ export default (testContext: {
       expect(result).toEqual(true)
     })
 
+    it('should sign a verifiable presentation in LD', async () => {
+      const verifiableCredential = await agent.dataStoreGetVerifiableCredential({ hash: storedCredentialHash })
+
+      const verifiablePresentation = await agent.createVerifiablePresentation({
+        presentation: {
+          holder: ethrIdentifier.did,
+          verifier: [],
+          '@context': ['https://www.w3.org/2018/credentials/v1'],
+          type: ['VerifiablePresentation'],
+          verifiableCredential: [verifiableCredential],
+        },
+        challenge,
+        proofFormat: 'lds',
+      })
+
+      expect(verifiablePresentation).toHaveProperty('proof.jws')
+    })
+
+
+    it('should sign and verify a verifiable presentation in LD', async () => {
+      const verifiableCredential = await agent.dataStoreGetVerifiableCredential({ hash: storedCredentialHash })
+
+      const domain = 'TEST_DOMAIN'
+      const verifiablePresentation = await agent.createVerifiablePresentation({
+        presentation: {
+          holder: ethrIdentifier.did,
+          verifier: [],
+          '@context': ['https://www.w3.org/2018/credentials/v1'],
+          type: ['VerifiablePresentation'],
+          verifiableCredential: [verifiableCredential],
+        },
+        challenge,
+        domain,
+        proofFormat: 'lds',
+      })
+
+      console.log(JSON.stringify(verifiablePresentation, null,  2))
+
+      const result = await agent.verifyVerifiablePresentation({
+        presentation: verifiablePresentation,
+        challenge,
+        domain
+      })
+
+      expect(result).toBeTruthy()
+    })
+
     it('should create did:key identifier', async () => {
       keyE256KIdentifier = await agent.didManagerCreate({ kms: 'local', provider: 'did:key' })
       expect(keyE256KIdentifier).toHaveProperty('did')
@@ -96,11 +146,29 @@ export default (testContext: {
           type: ['VerifiableCredential', 'Profile'],
           issuanceDate: new Date().toISOString(),
           credentialSubject: {
+            id: keyE256KIdentifier.did,
             name: "Martin, the great"
           },
         },
         proofFormat: 'lds',
       })
+      // console.log('JSON_CREDENTIAL:')
+      // console.log(JSON.stringify({
+      //   credential: {
+      //     issuer: { id: keyE256KIdentifier.did },
+      //     '@context': [
+      //       'https://www.w3.org/2018/credentials/v1',
+      //       'https://veramo.io/contexts/profile/v1'
+      //     ],
+      //     type: ['VerifiableCredential', 'Profile'],
+      //     issuanceDate: new Date().toISOString(),
+      //     credentialSubject: {
+      //       id: keyE256KIdentifier.did,
+      //       name: "Martin, the great"
+      //     },
+      //   },
+      //   proofFormat: 'lds',
+      // }, null,  2))
 
       // Check credential:
       expect(verifiableCredential).toHaveProperty('proof')
