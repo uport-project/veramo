@@ -49,6 +49,7 @@ export default (testContext: {
             name: "Martin, the great"
           },
         },
+        save: true,
         proofFormat: 'lds',
       })
 
@@ -65,8 +66,9 @@ export default (testContext: {
       expect(verifiableCredential['type']).toEqual(
         ['VerifiableCredential', 'Profile'])
 
-      storedCredentialHash = await agent.dataStoreSaveVerifiableCredential({ verifiableCredential })
-      expect(typeof storedCredentialHash).toEqual('string')
+      expect(await agent.dataStoreORMGetVerifiableCredentialsCount()).toEqual(1)
+
+      storedCredentialHash = (await agent.dataStoreORMGetVerifiableCredentials())[0].hash
 
       const verifiableCredential2 = await agent.dataStoreGetVerifiableCredential({ hash: storedCredentialHash })
       expect(verifiableCredential).toEqual(verifiableCredential2)
@@ -95,6 +97,9 @@ export default (testContext: {
           verifiableCredential: [verifiableCredential],
         },
         challenge,
+        // TODO: QueryFailedError: SQLITE_CONSTRAINT: NOT NULL constraint failed: presentation.issuanceDate
+        // Currently LD Presentations are NEVER saved. (they have no issuanceDate)
+        save: true,
         proofFormat: 'lds',
       })
 
