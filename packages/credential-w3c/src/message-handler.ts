@@ -52,7 +52,7 @@ export class W3cMessageHandler extends AbstractMessageHandler {
   async handle(message: Message, context: IContext): Promise<Message> {
     const meta = message.getLastMetaData()
 
-    console.log(JSON.stringify(message, null,  2))
+    // console.log(JSON.stringify(message, null,  2))
 
     //FIXME: messages should not be expected to be only JWT
     if (meta?.type === 'JWT' && message.raw) {
