@@ -1,8 +1,9 @@
 import { TAgent, IDIDManager, IDataStore, IIdentifier } from '../../packages/core/src'
 import { IDataStoreORM } from '../../packages/data-store/src'
 import { ICredentialIssuer } from '../../packages/credential-w3c/src'
+import { IDIDComm } from '@veramo/did-comm'
 
-type ConfiguredAgent = TAgent<IDIDManager & ICredentialIssuer & IDataStore & IDataStoreORM>
+type ConfiguredAgent = TAgent<IDIDManager & ICredentialIssuer & IDataStore & IDataStoreORM & IDIDComm>
 
 export default (testContext: {
   getAgent: () => ConfiguredAgent
@@ -30,7 +31,7 @@ export default (testContext: {
 
     it('should resolve identifier', async () => {
       const didDoc = (await agent.resolveDid({ didUrl: ethrIdentifier.did })).didDocument
-      console.log(JSON.stringify(didDoc, null, 2));
+      // console.log(JSON.stringify(didDoc, null, 2));
       expect(didDoc).toHaveProperty('verificationMethod')
     })
 
@@ -85,6 +86,41 @@ export default (testContext: {
       expect(result).toEqual(true)
     })
 
+    it('should handleMessage with VC (non-JWT)', async () => {
+      const verifiableCredential = await agent.dataStoreGetVerifiableCredential({ hash: storedCredentialHash })
+
+      const parsedMessage = await agent.handleMessage({
+        raw: JSON.stringify({
+          body: verifiableCredential,
+          type: 'w3c.vc'
+        }),
+        save: false,
+        metaData: [{ type: 'LDS' }],
+      })
+      expect(typeof parsedMessage.id).toEqual('string')
+    })
+
+    it('should fail handleMessage with wrong VC (non-JWT)', async () => {
+      expect.assertions(1);
+
+      const verifiableCredential = await agent.dataStoreGetVerifiableCredential({ hash: storedCredentialHash })
+
+      verifiableCredential.credentialSubject.name = "Martin, the not so greats"
+
+      try {
+        await agent.handleMessage({
+          raw: JSON.stringify({
+            body: verifiableCredential,
+            type: 'w3c.vc'
+          }),
+          save: false,
+          metaData: [{ type: 'LDS' }],
+        });
+      } catch (e) {
+        expect(e).toEqual(Error('Error verifying LD Verifiable Credential'));
+      }
+    })
+
     it('should sign a verifiable presentation in LD', async () => {
       const verifiableCredential = await agent.dataStoreGetVerifiableCredential({ hash: storedCredentialHash })
 
@@ -124,7 +160,7 @@ export default (testContext: {
         proofFormat: 'lds',
       })
 
-      console.log(JSON.stringify(verifiablePresentation, null,  2))
+      // console.log(JSON.stringify(verifiablePresentation, null,  2))
 
       const result = await agent.verifyVerifiablePresentation({
         presentation: verifiablePresentation,
@@ -133,6 +169,33 @@ export default (testContext: {
       })
 
       expect(result).toBeTruthy()
+    })
+
+    it('should handleMessage with VPs (non-JWT)', async () => {
+      const verifiableCredential = await agent.dataStoreGetVerifiableCredential({ hash: storedCredentialHash })
+
+      const verifiablePresentation = await agent.createVerifiablePresentation({
+        presentation: {
+          holder: ethrIdentifier.did,
+          verifier: [],
+          '@context': ['https://www.w3.org/2018/credentials/v1'],
+          type: ['VerifiablePresentation'],
+          verifiableCredential: [verifiableCredential],
+        },
+        challenge: 'VERAMO',
+        domain: 'VERAMO',
+        proofFormat: 'lds',
+      })
+
+      const parsedMessage = await agent.handleMessage({
+        raw: JSON.stringify({
+          body: verifiablePresentation,
+          type: 'w3c.vp'
+        }),
+        save: false,
+        metaData: [{ type: 'LDS' }],
+      })
+      expect(typeof parsedMessage.id).toEqual('string')
     })
 
     it('should create did:key identifier', async () => {
@@ -204,6 +267,7 @@ export default (testContext: {
     //
     //   expect(result).toEqual(true)
     // })
+
 
   })
 }

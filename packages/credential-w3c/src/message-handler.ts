@@ -1,4 +1,4 @@
-import { IAgentContext, IResolver } from '@veramo/core'
+import { IAgentContext, IResolver, VerifiableCredential, VerifiablePresentation } from '@veramo/core'
 import { Message, AbstractMessageHandler } from '@veramo/message-handler'
 import { blake2bHex } from 'blakejs'
 
@@ -10,6 +10,8 @@ import {
 } from 'did-jwt-vc'
 
 import Debug from 'debug'
+
+import { ICredentialIssuer } from './action-handler'
 const debug = Debug('veramo:w3c:message-handler')
 
 /**
@@ -30,7 +32,7 @@ export const MessageTypes = {
  *
  * This interface can be used for static type checks, to make sure your application is properly initialized.
  */
-export type IContext = IAgentContext<IResolver>
+export type IContext = IAgentContext<IResolver & ICredentialIssuer>
 
 /**
  * An implementation of the {@link @veramo/message-handler#AbstractMessageHandler}.
@@ -49,6 +51,8 @@ export class W3cMessageHandler extends AbstractMessageHandler {
 
   async handle(message: Message, context: IContext): Promise<Message> {
     const meta = message.getLastMetaData()
+
+    console.log(JSON.stringify(message, null,  2))
 
     //FIXME: messages should not be expected to be only JWT
     if (meta?.type === 'JWT' && message.raw) {
@@ -98,6 +102,57 @@ export class W3cMessageHandler extends AbstractMessageHandler {
         return message
       } catch (e) {}
     }
+
+    // LDS Verification and Handling
+    if (message.type === MessageTypes.vc && message.data) {
+      // verify credential
+      const credential = message.data as VerifiableCredential
+
+      // throws on error.
+      await context.agent.verifyVerifiableCredential({ credential })
+      message.id = blake2bHex(message.raw)
+      message.type = MessageTypes.vc
+      message.from = credential.issuer.id
+      message.to = credential.credentialSubject.id
+
+      if (credential.tag) {
+        message.threadId = credential.tag
+      }
+
+      message.createdAt = credential.issuanceDate
+      message.credentials = [credential]
+      return message
+    }
+
+    if (message.type === MessageTypes.vp && message.data) {
+      // verify credential
+      const presentation = message.data as VerifiablePresentation
+
+      // throws on error.
+      await context.agent.verifyVerifiablePresentation({
+        presentation,
+        // TODO: HARDCODED CHALLENGE VERIFICATION FOR NOW
+        challenge: 'VERAMO',
+        domain: 'VERAMO'
+      })
+
+      const credentials = presentation.verifiableCredential
+
+      message.id = blake2bHex(message.raw)
+      message.type = MessageTypes.vp
+      message.from = presentation.holder
+      // message.to = presentation.verifier?.[0]
+
+      if (presentation.tag) {
+        message.threadId = presentation.tag
+      }
+
+      // message.createdAt = presentation.issuanceDate
+      message.presentations = [presentation]
+      message.credentials = credentials
+      return message
+    }
+
 
     return super.handle(message, context)
   }
