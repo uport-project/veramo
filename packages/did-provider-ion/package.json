@@ -1,0 +1,34 @@
+{
+  "name": "@veramo/did-provider-ion",
+  "description": "Veramo ion-did based identity controller plugin.",
+  "version": "1.1.0",
+  "main": "build/index.js",
+  "types": "build/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "extract-api": "yarn veramo dev extract-api"
+  },
+  "dependencies": {
+    "@decentralized-identity/ion-tools": "git://github.com/rado0x54/ion-tools.git",
+    "@veramo/core": "^1.1.0",
+    "@veramo/did-manager": "^1.1.0",
+    "debug": "^4.1.1"
+  },
+  "devDependencies": {
+    "@types/debug": "4.1.5",
+    "typescript": "4.2.3"
+  },
+  "files": [
+    "build/**/*",
+    "src/**/*",
+    "README.md",
+    "LICENSE"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": "git@github.com:uport-project/veramo.git",
+  "author": "Martin Riedel <martin.riedel@mesh.xyz>",
+  "license": "Apache-2.0",
+  "keywords": []
+}

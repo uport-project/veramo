@@ -1,0 +1,9 @@
+{
+  "extends": "../tsconfig.settings.json",
+  "compilerOptions": {
+    "rootDir": "src",
+    "outDir": "build",
+    "declarationDir": "build"
+  },
+  "references": [{ "path": "../core" }, { "path": "../did-manager" }]
+}
