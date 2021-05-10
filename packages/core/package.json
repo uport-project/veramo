@@ -1,7 +1,7 @@
 {
   "name": "@veramo/core",
   "description": "Veramo Core Logic & Interfaces.",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "main": "build/index.js",
   "types": "build/index.d.ts",
   "scripts": {
@@ -20,7 +20,7 @@
   "dependencies": {
     "debug": "^4.1.1",
     "did-jwt-vc": "2.1.0",
-    "events": "^3.0.0",
+    "events": "^3.2.0",
     "z-schema": "^5.0.0"
   },
   "devDependencies": {

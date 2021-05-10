@@ -1,7 +1,7 @@
 {
   "name": "@veramo/data-store",
   "description": "Veramo date storage based on TypeORM",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "main": "build/index.js",
   "types": "build/index.d.ts",
   "scripts": {
@@ -14,9 +14,9 @@
     }
   },
   "dependencies": {
-    "@veramo/core": "^1.1.0",
-    "@veramo/did-manager": "^1.1.0",
-    "@veramo/key-manager": "^1.1.0",
+    "@veramo/core": "^1.2.0",
+    "@veramo/did-manager": "^1.2.0",
+    "@veramo/key-manager": "^1.2.0",
     "debug": "^4.1.1",
     "typeorm": "0.2.32"
   },

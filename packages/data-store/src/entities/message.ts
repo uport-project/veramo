@@ -21,7 +21,7 @@ export interface MetaData {
   value?: string
 }
 
-@Entity()
+@Entity('message')
 export class Message extends BaseEntity {
   @BeforeInsert()
   setId() {

@@ -6,7 +6,7 @@ import { Message } from './message'
 import { Presentation } from './presentation'
 import { Claim } from './claim'
 
-@Entity()
+@Entity('credential')
 export class Credential extends BaseEntity {
   @PrimaryColumn()
   //@ts-ignore

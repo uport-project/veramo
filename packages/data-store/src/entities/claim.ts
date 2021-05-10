@@ -2,7 +2,7 @@ import { Entity, Column, BaseEntity, ManyToOne, PrimaryColumn } from 'typeorm'
 import { Identifier } from './identifier'
 import { Credential } from './credential'
 
-@Entity()
+@Entity('claim')
 export class Claim extends BaseEntity {
   @PrimaryColumn()
   //@ts-ignore

@@ -1,7 +1,7 @@
 {
   "name": "@veramo/remote-server",
   "description": "Express.js module that can expose some agent methods and messaging endpoints",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "main": "build/index.js",
   "types": "build/index.d.ts",
   "scripts": {
@@ -9,12 +9,12 @@
     "extract-api": "yarn veramo dev extract-api"
   },
   "dependencies": {
-    "@veramo/core": "^1.1.0",
-    "@veramo/remote-client": "^1.1.0",
+    "@veramo/core": "^1.2.0",
+    "@veramo/remote-client": "^1.2.0",
     "debug": "^4.1.1",
     "passport": "^0.4.1",
     "passport-http-bearer": "^1.0.1",
-    "url-parse": "^1.4.7"
+    "url-parse": "^1.5.1"
   },
   "devDependencies": {
     "@types/debug": "4.1.5",

@@ -80,6 +80,7 @@ describe('@veramo/did-resolver', () => {
           },
         ],
         authentication: ['did:ethr:rinkeby:0xE6Fe788d8ca214A080b0f6aC7F48480b2AEfa9a6#controller'],
+        assertionMethod: ['did:ethr:rinkeby:0xE6Fe788d8ca214A080b0f6aC7F48480b2AEfa9a6#controller'],
       },
       didDocumentMetadata: {},
       didResolutionMetadata: { contentType: 'application/did+ld+json' },

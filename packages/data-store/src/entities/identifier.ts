@@ -17,7 +17,7 @@ import { Credential } from './credential'
 import { Claim } from './claim'
 import { Connection } from 'typeorm'
 
-@Entity()
+@Entity('identifier')
 @Index(['alias', 'provider'], { unique: true })
 export class Identifier extends BaseEntity {
   @PrimaryColumn()

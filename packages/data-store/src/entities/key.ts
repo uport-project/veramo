@@ -3,7 +3,7 @@ import { Identifier } from './identifier'
 
 export type KeyType = 'Ed25519' | 'Secp256k1'
 
-@Entity()
+@Entity('key')
 export class Key extends BaseEntity {
   @PrimaryColumn()
   //@ts-ignore

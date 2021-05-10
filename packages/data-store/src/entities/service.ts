@@ -1,7 +1,7 @@
 import { Entity, Column, PrimaryColumn, BaseEntity, ManyToOne } from 'typeorm'
 import { Identifier } from './identifier'
 
-@Entity()
+@Entity('service')
 export class Service extends BaseEntity {
   @PrimaryColumn()
   //@ts-ignore

@@ -1,7 +1,7 @@
 {
   "name": "@veramo/did-comm",
   "description": "Veramo DIDComm inspired messaging based on the v1 messaging envelope.",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "main": "build/index.js",
   "types": "build/index.d.ts",
   "scripts": {
@@ -14,9 +14,9 @@
     }
   },
   "dependencies": {
-    "@veramo/core": "^1.1.0",
-    "@veramo/message-handler": "^1.1.0",
-    "cross-fetch": "^3.0.5",
+    "@veramo/core": "^1.2.0",
+    "@veramo/message-handler": "^1.2.0",
+    "cross-fetch": "^3.1.4",
     "debug": "^4.1.1",
     "uuid": "^8.3.0"
   },

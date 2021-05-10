@@ -14,7 +14,7 @@ import { Identifier } from './identifier'
 import { Message } from './message'
 import { Credential, createCredentialEntity } from './credential'
 
-@Entity()
+@Entity('presentation')
 export class Presentation extends BaseEntity {
   @PrimaryColumn()
   //@ts-ignore
