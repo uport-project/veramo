@@ -42,6 +42,7 @@ import { AgentRouter, RequestWithAgentRouter } from '../packages/remote-server/s
 import { Resolver } from 'did-resolver'
 import { getResolver as ethrDidResolver } from 'ethr-did-resolver'
 import { getResolver as webDidResolver } from 'web-did-resolver'
+import { getUniversalResolver } from '../packages/did-resolver/src/universal-resolver'
 import fs from 'fs'
 
 jest.setTimeout(30000)
@@ -55,7 +56,7 @@ import documentationExamples from './shared/documentationExamples'
 import keyManager from './shared/keyManager'
 import didManager from './shared/didManager'
 import messageHandler from './shared/messageHandler'
-import { getUniversalResolver } from '../packages/did-resolver/src/universal-resolver'
+import ceramic from './shared/ceramic'
 
 const databaseFile = 'rest-database.sqlite'
 const infuraProjectId = '5ffc47f65c4042ce847ef66a3fa70d4c'
@@ -191,4 +192,5 @@ describe('REST integration tests', () => {
   keyManager(testContext)
   didManager(testContext)
   messageHandler(testContext)
+  ceramic(testContext)
 })

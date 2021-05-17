@@ -44,6 +44,7 @@ import documentationExamples from './shared/documentationExamples'
 import keyManager from './shared/keyManager'
 import didManager from './shared/didManager'
 import messageHandler from './shared/messageHandler'
+import ceramic from './shared/ceramic'
 
 const databaseFile = 'local-database2.sqlite'
 const infuraProjectId = '5ffc47f65c4042ce847ef66a3fa70d4c'
@@ -164,4 +165,5 @@ describe('Local in-memory integration tests', () => {
   keyManager(testContext)
   didManager(testContext)
   messageHandler(testContext)
+  ceramic(testContext)
 })
