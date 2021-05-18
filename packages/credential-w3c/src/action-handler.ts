@@ -25,7 +25,7 @@ const vc = require('vc-js');
 const { defaultDocumentLoader } = vc;
 const {extendContextLoader} = require('jsonld-signatures');
 const {EcdsaSecp256k1RecoveryMethod2020, EcdsaSecp256k1RecoverySignature2020} = require('EcdsaSecp256k1RecoverySignature2020')
-import {Ed25519Signature2020, Ed25519KeyPair2020} from '@transmute/ed25519-signature-2020'
+import {Ed25519Signature2018, Ed25519KeyPair} from '@transmute/ed25519-signature-2018'
 const Base58 = require('base-58');
 // Start END LD Libraries
 
@@ -338,6 +338,20 @@ const getDocumentLoader = (context: IContext) => extendContextLoader(async (url:
       })
     }
 
+    // did:key
+    if (url.toLowerCase().startsWith('did:key')) {
+      // TODO: Fix the strange id naming in did:key. make sure its ${}#controller
+      // let newId = '';
+      // returnDocument.publicKey?.forEach(x => {
+      //   newId = `${x.id.substring(0, x.id.lastIndexOf("#"))}#controller`
+      //   x.id = newId
+      // })
+      //
+      // returnDocument.assertionMethod = [ newId ]
+      // returnDocument.verificationMethod = returnDocument.publicKey
+      // console.log(`Returning from Documentloader: ${JSON.stringify(returnDocument)}`)
+    }
+
 
     // console.log(`Returning from Documentloader: ${JSON.stringify(returnDocument)}`)
     return {
@@ -380,9 +394,17 @@ const getLDSigningSuite = (key: IKey, identifier: IIdentifier) => {
       });
       break;
     case 'Ed25519':
-      suite = new Ed25519Signature2020({
-        key: new Ed25519KeyPair2020({
-          id: `${controller}#controller`,
+      // DID Key ID
+      let id = `${controller}#controller`
+      // TODO: Hacky id adjustment
+      if (controller.startsWith('did:key')) {
+        id = `${controller}#${controller.substring(controller.lastIndexOf(':') + 1)}`
+      }
+
+
+      suite = new Ed25519Signature2018({
+        key: new Ed25519KeyPair({
+          id,
           controller,
           publicKeyBase58: Base58.encode(Buffer.from(key.publicKeyHex, 'hex')),
           privateKeyBase58: Base58.encode(Buffer.from(key.privateKeyHex, 'hex')),
@@ -606,7 +628,7 @@ export class CredentialIssuer implements IAgentPlugin {
 
     const result = await vc.verifyCredential({
       credential,
-      suite: [new EcdsaSecp256k1RecoverySignature2020(), new Ed25519Signature2020()],
+      suite: [new EcdsaSecp256k1RecoverySignature2020(), new Ed25519Signature2018()],
       documentLoader: getDocumentLoader(context),
       purpose: new AssertionProofPurpose(),
       compactProof: false
@@ -637,7 +659,7 @@ export class CredentialIssuer implements IAgentPlugin {
 
     const result = await vc.verify({
       presentation,
-      suite: [new EcdsaSecp256k1RecoverySignature2020(), new Ed25519Signature2020()],
+      suite: [new EcdsaSecp256k1RecoverySignature2020(), new Ed25519Signature2018({})],
       documentLoader: getDocumentLoader(context),
       challenge: args.challenge,
       domain: args.domain,
