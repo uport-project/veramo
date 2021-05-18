@@ -1,0 +1,37 @@
+{
+  "name": "@veramo/ceramic",
+  "description": "Veramo ceramic plugin",
+  "version": "1.2.0",
+  "main": "build/index.js",
+  "types": "build/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "extract-api": "yarn veramo dev extract-api"
+  },
+  "dependencies": {
+    "@veramo/core": "^1.2.0",
+    "@veramo/did-manager": "^1.2.0",
+    "@veramo/key-manager": "^1.2.0",
+    "debug": "^4.1.1",
+    "dids": "^2.1.0",
+    "fast-json-stable-stringify": "^2.1.0",
+    "rpc-utils": "^0.3.4"
+  },
+  "devDependencies": {
+    "@types/debug": "4.1.5",
+    "typescript": "4.2.4"
+  },
+  "files": [
+    "build/**/*",
+    "src/**/*",
+    "README.md",
+    "LICENSE"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": "git@github.com:uport-project/veramo.git",
+  "author": "Simonas Karuzas <simonas.karuzas@mesh.xyz>",
+  "license": "Apache-2.0",
+  "keywords": []
+}

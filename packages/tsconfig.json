@@ -2,6 +2,7 @@
   "files": [],
   "references": [
     { "path": "core" },
+    { "path": "ceramic" },
     { "path": "credential-w3c" },
     { "path": "data-store" },
     { "path": "did-comm" },
