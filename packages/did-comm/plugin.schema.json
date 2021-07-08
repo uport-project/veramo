@@ -2,6 +2,141 @@
   "IDIDComm": {
     "components": {
       "schemas": {
+        "IPackedDIDCommMessage": {
+          "type": "object",
+          "properties": {
+            "message": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "message"
+          ],
+          "description": "The result of packing a DIDComm v2 message. The message is always serialized as string."
+        },
+        "DIDCommMessageMediaType": {
+          "type": "string",
+          "enum": [
+            "application/didcomm-plain+json",
+            "application/didcomm-signed+json",
+            "application/didcomm-encrypted+json"
+          ],
+          "description": "Represents different DIDComm v2 message encapsulation"
+        },
+        "IPackDIDCommMessageArgs": {
+          "type": "object",
+          "properties": {
+            "message": {
+              "$ref": "#/components/schemas/IDIDCommMessage"
+            },
+            "packing": {
+              "$ref": "#/components/schemas/DIDCommMessagePacking"
+            },
+            "keyRef": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "message",
+            "packing"
+          ],
+          "description": "The input to the  {@link  DIDComm.packDIDCommMessage }  method. When `packing` is `authcrypt` or `jws`, a `keyRef` MUST be provided."
+        },
+        "IDIDCommMessage": {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string"
+            },
+            "from": {
+              "type": "string"
+            },
+            "to": {
+              "type": "string"
+            },
+            "thid": {
+              "type": "string"
+            },
+            "pthid": {
+              "type": "string"
+            },
+            "id": {
+              "type": "string"
+            },
+            "expires_time": {
+              "type": "string"
+            },
+            "created_time": {
+              "type": "string"
+            },
+            "next": {
+              "type": "string"
+            },
+            "from_prior": {
+              "type": "string"
+            },
+            "body": {}
+          },
+          "required": [
+            "type",
+            "to",
+            "id",
+            "body"
+          ],
+          "description": "The DIDComm message structure. See https://identity.foundation/didcomm-messaging/spec/#plaintext-message-structure"
+        },
+        "DIDCommMessagePacking": {
+          "type": "string",
+          "enum": [
+            "authcrypt",
+            "anoncrypt",
+            "jws",
+            "none",
+            "anoncrypt+authcrypt",
+            "anoncrypt+jws"
+          ],
+          "description": "The possible types of message packing.\n\n* `authcrypt`, `anoncrypt`, `anoncrypt+authcrypt`, and `anoncrypt+jws` will produce  {@link  DIDCommMessageMediaType.ENCRYPTED }  messages.\n* `jws` will produce  {@link  DIDCommMessageMediaType.SIGNED }  messages.\n* `none` will produce  {@link  DIDCommMessageMediaType.PLAIN }  messages."
+        },
+        "ISendDIDCommMessageArgs": {
+          "type": "object",
+          "properties": {
+            "packedMessage": {
+              "$ref": "#/components/schemas/IPackedDIDCommMessage"
+            },
+            "returnTransport": {
+              "$ref": "#/components/schemas/IDIDCommTransport"
+            },
+            "recipientDID": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "packedMessage",
+            "recipientDID"
+          ]
+        },
+        "IDIDCommTransport": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "id"
+          ]
+        },
+        "ISendDIDCommMessageResult": {
+          "type": "object",
+          "properties": {
+            "sent": {
+              "type": "boolean"
+            },
+            "error": {
+              "type": "string"
+            }
+          }
+        },
         "ISendMessageDIDCommAlpha1Args": {
           "type": "object",
           "properties": {
@@ -54,7 +189,7 @@
           "required": [
             "data"
           ],
-          "description": "Input arguments for {@link IDIDComm.sendMessageDIDCommAlpha1}"
+          "description": "Input arguments for  {@link  IDIDComm.sendMessageDIDCommAlpha1 }"
         },
         "IMessage": {
           "type": "object",
@@ -240,7 +375,7 @@
             "credentialSubject",
             "proof"
           ],
-          "description": "Verifiable Credential {@link https://github.com/decentralized-identifier/did-jwt-vc}"
+          "description": "Verifiable Credential  {@link  https://github.com/decentralized-identifier/did-jwt-vc }"
         },
         "VerifiablePresentation": {
           "type": "object",
@@ -298,17 +433,85 @@
             "verifiableCredential",
             "proof"
           ],
-          "description": "Verifiable Presentation {@link https://github.com/decentralized-identifier/did-jwt-vc}"
+          "description": "Verifiable Presentation  {@link  https://github.com/decentralized-identifier/did-jwt-vc }"
+        },
+        "IUnpackDIDCommMessageArgs": {
+          "$ref": "#/components/schemas/IPackedDIDCommMessage",
+          "description": "The input to the  {@link  DIDComm.unpackDIDCommMessage }  method."
+        },
+        "IUnpackedDIDCommMessage": {
+          "type": "object",
+          "properties": {
+            "metaData": {
+              "$ref": "#/components/schemas/IDIDCommMessageMetaData"
+            },
+            "message": {
+              "$ref": "#/components/schemas/IDIDCommMessage"
+            }
+          },
+          "required": [
+            "metaData",
+            "message"
+          ],
+          "description": "The result of unpacking a DIDComm v2 message"
+        },
+        "IDIDCommMessageMetaData": {
+          "type": "object",
+          "properties": {
+            "packing": {
+              "$ref": "#/components/schemas/DIDCommMessagePacking"
+            }
+          },
+          "required": [
+            "packing"
+          ],
+          "description": "Metadata resulting from unpacking a DIDComm v2 message"
         }
       },
       "methods": {
+        "getDIDCommMessageMediaType": {
+          "description": "Partially decodes a possible DIDComm message string to determine the ",
+          "arguments": {
+            "$ref": "#/components/schemas/IPackedDIDCommMessage"
+          },
+          "returnType": {
+            "$ref": "#/components/schemas/DIDCommMessageMediaType"
+          }
+        },
+        "packDIDCommMessage": {
+          "description": "Packs a ",
+          "arguments": {
+            "$ref": "#/components/schemas/IPackDIDCommMessageArgs"
+          },
+          "returnType": {
+            "$ref": "#/components/schemas/IPackedDIDCommMessage"
+          }
+        },
+        "sendDIDCommMessage": {
+          "description": "TODO: add docs here",
+          "arguments": {
+            "$ref": "#/components/schemas/ISendDIDCommMessageArgs"
+          },
+          "returnType": {
+            "$ref": "#/components/schemas/ISendDIDCommMessageResult"
+          }
+        },
         "sendMessageDIDCommAlpha1": {
-          "description": "This is used to create a message according to the initial ",
+          "description": "",
           "arguments": {
             "$ref": "#/components/schemas/ISendMessageDIDCommAlpha1Args"
           },
           "returnType": {
             "$ref": "#/components/schemas/IMessage"
+          }
+        },
+        "unpackDIDCommMessage": {
+          "description": "Unpacks a possible DIDComm message and returns the ",
+          "arguments": {
+            "$ref": "#/components/schemas/IUnpackDIDCommMessageArgs"
+          },
+          "returnType": {
+            "$ref": "#/components/schemas/IUnpackedDIDCommMessage"
           }
         }
       }

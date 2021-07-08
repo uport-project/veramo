@@ -32,7 +32,7 @@ describe('@veramo/did-resolver', () => {
     expect.assertions(1)
     await expect(resolverPlugin.resolveDid({ didUrl: 'did:web:did.actor:alice' })).resolves.toEqual({
       didDocument: {
-        '@context': 'https://w3id.org/did/v0.11',
+        '@context': ['https://w3.org/ns/did/v1', 'https://w3id.org/security/suites/ed25519-2018/v1'],
         id: 'did:web:did.actor:alice',
         publicKey: [
           {
@@ -97,8 +97,7 @@ describe('@veramo/did-resolver', () => {
       id: 'did:key:z6Mkfriq1MqLBoPWecGoDLjguo1sB9brj6wT3qZ5BxkKpuP6',
       publicKey: [
         {
-          id:
-            'did:key:z6Mkfriq1MqLBoPWecGoDLjguo1sB9brj6wT3qZ5BxkKpuP6#z6Mkfriq1MqLBoPWecGoDLjguo1sB9brj6wT3qZ5BxkKpuP6',
+          id: 'did:key:z6Mkfriq1MqLBoPWecGoDLjguo1sB9brj6wT3qZ5BxkKpuP6#z6Mkfriq1MqLBoPWecGoDLjguo1sB9brj6wT3qZ5BxkKpuP6',
           type: 'Ed25519VerificationKey2018',
           controller: 'did:key:z6Mkfriq1MqLBoPWecGoDLjguo1sB9brj6wT3qZ5BxkKpuP6',
           publicKeyBase58: '2QTnR7atrFu3Y7S6Xmmr4hTsMaL1KDh6Mpe9MgnJugbi',
@@ -118,8 +117,7 @@ describe('@veramo/did-resolver', () => {
       ],
       keyAgreement: [
         {
-          id:
-            'did:key:z6Mkfriq1MqLBoPWecGoDLjguo1sB9brj6wT3qZ5BxkKpuP6#z6LSbgq3GejX88eiAYWmZ9EiddS3GaXodvm8MJJyEH7bqXgz',
+          id: 'did:key:z6Mkfriq1MqLBoPWecGoDLjguo1sB9brj6wT3qZ5BxkKpuP6#z6LSbgq3GejX88eiAYWmZ9EiddS3GaXodvm8MJJyEH7bqXgz',
           type: 'X25519KeyAgreementKey2019',
           controller: 'did:key:z6Mkfriq1MqLBoPWecGoDLjguo1sB9brj6wT3qZ5BxkKpuP6',
           publicKeyBase58: '1eskLvf2fvy5A912VimK3DZRRzgwKayUKbHjpU589vE',

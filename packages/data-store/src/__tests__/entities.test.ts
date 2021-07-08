@@ -156,7 +156,7 @@ describe('veramo core', () => {
       where: {
         issuer: In([did1]),
         subject: In([did2]),
-        type: 'name'
+        type: 'name',
       },
     })
 

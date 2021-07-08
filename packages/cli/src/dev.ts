@@ -36,12 +36,6 @@ function createSchema(generator: TJS.SchemaGenerator, symbol: string) {
 
   const schema = generator.createSchema(fixedSymbol)
 
-  if (fixedSymbol === 'ICreateVerifiableCredentialArgs') {
-    //@ts-ignore
-    schema.definitions['W3CCredential']['properties']['credentialSubject']['additionalProperties'] = true
-  }
-  // console.dir({ fixedSymbol, schema }, {depth: 10})
-
   const newSchema = {
     components: {
       schemas: schema.definitions,

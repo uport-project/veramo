@@ -16,16 +16,9 @@ export class MemoryDIDStore extends AbstractDIDStore {
     if (did !== undefined && alias === undefined) {
       if (!this.identifiers[did]) throw Error('Identifier not found')
       return this.identifiers[did]
-    } else if (
-      did === undefined &&
-      alias !== undefined &&
-      provider !== undefined
-    ) {
+    } else if (did === undefined && alias !== undefined && provider !== undefined) {
       for (const key of Object.keys(this.identifiers)) {
-        if (
-          this.identifiers[key].alias === alias &&
-          this.identifiers[key].provider === provider
-        ) {
+        if (this.identifiers[key].alias === alias && this.identifiers[key].provider === provider) {
           return this.identifiers[key]
         }
       }
@@ -41,7 +34,7 @@ export class MemoryDIDStore extends AbstractDIDStore {
   }
 
   async import(args: IIdentifier) {
-    const identifier = {...args}
+    const identifier = { ...args }
     for (const key of identifier.keys) {
       if (key.privateKeyHex) {
         delete key.privateKeyHex
@@ -51,10 +44,7 @@ export class MemoryDIDStore extends AbstractDIDStore {
     return true
   }
 
-  async list(args: {
-    alias?: string
-    provider?: string
-  }): Promise<IIdentifier[]> {
+  async list(args: { alias?: string; provider?: string }): Promise<IIdentifier[]> {
     let result: IIdentifier[] = []
 
     for (const key of Object.keys(this.identifiers)) {

@@ -91,7 +91,9 @@ describe('@veramo/selective-disclosure-helper', () => {
 
     const result = await actionHandler.validatePresentationAgainstSdr({ presentation, sdr }, context)
 
-    expect(result.claims[0].credentials[0].credentialSubject['firstName']).toEqual('Alice')
+    expect(result.claims[0].credentials[0].verifiableCredential.credentialSubject['firstName']).toEqual(
+      'Alice',
+    )
     expect(result.valid).toEqual(true)
   })
 

@@ -2,6 +2,7 @@ import { TAgent, IDIDManager, IIdentifier, IDataStore } from '../../packages/cor
 import { IDataStoreORM } from '../../packages/data-store/src'
 import { ICredentialIssuer } from '../../packages/credential-w3c/src'
 import { decodeJWT } from 'did-jwt'
+import { TKeyType } from '@veramo/core'
 
 type ConfiguredAgent = TAgent<IDIDManager & ICredentialIssuer & IDataStore & IDataStoreORM>
 
@@ -238,6 +239,51 @@ export default (testContext: {
           hash: 'foobar',
         }),
       ).rejects.toThrow('Verifiable presentation not found')
+    })
+
+    describe('using testvectors', () => {
+      const importedDID = {
+        did: 'did:ethr:rinkeby:0x03155ee0cbefeecd80de63a62b4ed8f0f97ac22a58f76a265903b9acab79bf018c',
+        provider: 'did:ethr:rinkeby',
+        controllerKeyId:
+          '04155ee0cbefeecd80de63a62b4ed8f0f97ac22a58f76a265903b9acab79bf018c7037e2bd897812170c92a4c978d6a10481491a37299d74c4bd412a111a4ac875',
+        keys: [
+          {
+            kid: '04155ee0cbefeecd80de63a62b4ed8f0f97ac22a58f76a265903b9acab79bf018c7037e2bd897812170c92a4c978d6a10481491a37299d74c4bd412a111a4ac875',
+            kms: 'local',
+            type: <TKeyType>'Secp256k1',
+            publicKeyHex:
+              '04155ee0cbefeecd80de63a62b4ed8f0f97ac22a58f76a265903b9acab79bf018c7037e2bd897812170c92a4c978d6a10481491a37299d74c4bd412a111a4ac875',
+            privateKeyHex: '31d1ec15ff8110442012fef0d1af918c0e09b2e2ab821bba52ecc85f8655ec63',
+          },
+        ],
+        services: [],
+      }
+
+      beforeAll(async () => {
+        const imported = await agent.didManagerImport(importedDID)
+      })
+
+      it('signs JWT with ES256K', async () => {
+        const credentialInput = {
+          credentialSubject: { id: 'did:example:subject', name: 'Alice' },
+          issuer: { id: importedDID.did },
+        }
+        const { proof, issuanceDate, ...comparableOutput } = await agent.createVerifiableCredential({
+          credential: credentialInput,
+          proofFormat: 'jwt',
+          save: false,
+          removeOriginalFields: true,
+        })
+        expect(comparableOutput).toEqual({
+          credentialSubject: { name: 'Alice', id: 'did:example:subject' },
+          issuer: {
+            id: 'did:ethr:rinkeby:0x03155ee0cbefeecd80de63a62b4ed8f0f97ac22a58f76a265903b9acab79bf018c',
+          },
+          type: ['VerifiableCredential'],
+          '@context': ['https://www.w3.org/2018/credentials/v1'],
+        })
+      })
     })
   })
 }

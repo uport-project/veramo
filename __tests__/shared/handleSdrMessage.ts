@@ -117,7 +117,8 @@ export default (testContext: {
         },
       })
 
-      expect(credentials[0].credentials[0]).toHaveProperty('proof.jwt')
+      expect(credentials[0].credentials[0]).toHaveProperty('hash')
+      expect(credentials[0].credentials[0]).toHaveProperty('verifiableCredential.proof.jwt')
     })
 
     it('should create verifiable presentation', async () => {
@@ -138,7 +139,7 @@ export default (testContext: {
           '@context': ['https://www.w3.org/2018/credentials/v1'],
           type: ['VerifiablePresentation'],
           issuanceDate: new Date().toISOString(),
-          verifiableCredential: credentials[0].credentials,
+          verifiableCredential: credentials[0].credentials.map((c) => c.verifiableCredential),
         },
         proofFormat: 'jwt',
         save: true,

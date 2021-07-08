@@ -320,7 +320,7 @@ did
     const agent = getAgent(program.opts().config)
     try {
       const ddo = await agent.resolveDid({ didUrl })
-      console.log(ddo)
+      console.log(JSON.stringify(ddo, null, 2))
     } catch (e) {
       console.error(e.message)
     }

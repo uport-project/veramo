@@ -97,7 +97,7 @@
             "verifiableCredential",
             "proof"
           ],
-          "description": "Verifiable Presentation {@link https://github.com/decentralized-identifier/did-jwt-vc}"
+          "description": "Verifiable Presentation  {@link  https://github.com/decentralized-identifier/did-jwt-vc }"
         },
         "VerifiableCredential": {
           "type": "object",
@@ -174,7 +174,7 @@
             "credentialSubject",
             "proof"
           ],
-          "description": "Verifiable Credential {@link https://github.com/decentralized-identifier/did-jwt-vc}"
+          "description": "Verifiable Credential  {@link  https://github.com/decentralized-identifier/did-jwt-vc }"
         },
         "ICreateSelectiveDisclosureRequestArgs": {
           "type": "object",
@@ -240,11 +240,11 @@
             },
             "credentialType": {
               "type": "string",
-              "description": "The credential type. See {@link https://www.w3.org/TR/vc-data-model/#types | W3C Credential Types}"
+              "description": "The credential type. See  {@link  https://www.w3.org/TR/vc-data-model/#types | W3C Credential Types }"
             },
             "credentialContext": {
               "type": "string",
-              "description": "The credential context. See {@link https://www.w3.org/TR/vc-data-model/#contexts | W3C Credential Context}"
+              "description": "The credential context. See  {@link  https://www.w3.org/TR/vc-data-model/#contexts | W3C Credential Context }"
             },
             "claimType": {
               "type": "string",
@@ -345,11 +345,11 @@
             },
             "credentialType": {
               "type": "string",
-              "description": "The credential type. See {@link https://www.w3.org/TR/vc-data-model/#types | W3C Credential Types}"
+              "description": "The credential type. See  {@link  https://www.w3.org/TR/vc-data-model/#types | W3C Credential Types }"
             },
             "credentialContext": {
               "type": "string",
-              "description": "The credential context. See {@link https://www.w3.org/TR/vc-data-model/#contexts | W3C Credential Context}"
+              "description": "The credential context. See  {@link  https://www.w3.org/TR/vc-data-model/#contexts | W3C Credential Context }"
             },
             "claimType": {
               "type": "string",
@@ -369,7 +369,7 @@
             "credentials": {
               "type": "array",
               "items": {
-                "$ref": "#/components/schemas/VerifiableCredential"
+                "$ref": "#/components/schemas/UniqueVerifiableCredential"
               }
             }
           },
@@ -378,6 +378,21 @@
             "credentials"
           ],
           "description": "The credentials that make up a response of a Selective Disclosure"
+        },
+        "UniqueVerifiableCredential": {
+          "type": "object",
+          "properties": {
+            "hash": {
+              "type": "string"
+            },
+            "verifiableCredential": {
+              "$ref": "#/components/schemas/VerifiableCredential"
+            }
+          },
+          "required": [
+            "hash",
+            "verifiableCredential"
+          ]
         },
         "IValidatePresentationAgainstSdrArgs": {
           "type": "object",

@@ -1,34 +1,30 @@
 {
-  "name": "@veramo/kms-local-react-native",
-  "description": "Veramo KMS implementation that provides Ed25519 and secp256k1 crypto for react-native env",
+  "name": "@veramo/did-discovery",
+  "description": "Veramo DID discovery plugin",
   "version": "1.2.0",
   "main": "build/index.js",
   "types": "build/index.d.ts",
   "scripts": {
     "build": "tsc",
-    "extract-api": "yarn veramo dev extract-api"
+    "generate-plugin-schema": "yarn veramo dev generate-plugin-schema"
+  },
+  "veramo": {
+    "pluginInterfaces": {
+      "IDIDDiscovery": "./src/types.ts"
+    }
   },
   "dependencies": {
     "@veramo/core": "^1.2.0",
-    "@veramo/key-manager": "^1.2.0",
-    "base-58": "^0.0.1",
-    "debug": "^4.1.1",
-    "did-jwt": "5.2.0",
-    "elliptic": "6.5.4",
-    "ethjs-signer": "^0.1.1"
-  },
-  "peerDependencies": {
-    "react-native-sodium": "*"
+    "debug": "^4.1.1"
   },
   "devDependencies": {
     "@types/debug": "4.1.5",
-    "@types/ethjs-signer": "0.1.0",
-    "react-native-sodium": "0.3.9",
-    "typescript": "4.2.4"
+    "typescript": "4.3.4"
   },
   "files": [
     "build/**/*",
     "src/**/*",
+    "plugin.schema.json",
     "README.md",
     "LICENSE"
   ],
@@ -41,6 +37,10 @@
     {
       "name": "Mircea Nistor",
       "email": "mircea.nistor@mesh.xyz"
+    },
+    {
+      "name": "Oliver Terbu",
+      "email": "oliver.terbu@mesh.xyz"
     }
   ],
   "license": "Apache-2.0",

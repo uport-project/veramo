@@ -9,7 +9,8 @@ import {
   W3CPresentation,
   VerifiableCredential,
   VerifiablePresentation,
-  IDataStore, IKey, IIdentifier,
+  IDataStore,
+  IKey,
 } from '@veramo/core'
 
 import {
@@ -298,7 +299,7 @@ export type IContext = IAgentContext<
   IResolver &
     Pick<IDIDManager, 'didManagerGet'> &
     Pick<IDataStore, 'dataStoreSaveVerifiablePresentation' | 'dataStoreSaveVerifiableCredential'> &
-    Pick<IKeyManager, 'keyManagerSignJWT' | 'keyManagerGet'>
+    Pick<IKeyManager, 'keyManagerSign'>
 >
 
 
@@ -533,11 +534,16 @@ export class CredentialIssuer implements IAgentPlugin {
       }
 
       //FIXME: Throw an `unsupported_format` error if the `args.proofFormat` is not `jwt`
-      const signer = (data: string | Uint8Array) => context.agent.keyManagerSignJWT({ kid: key.kid, data })
       debug('Signing VP with', identifier.did)
+      let alg = 'ES256K'
+      if (key.type === 'Ed25519') {
+        alg = 'EdDSA'
+      }
+      const signer = wrapSigner(context, key, alg)
+
       const jwt = await createVerifiablePresentationJwt(
         presentation,
-        { did: identifier.did, signer },
+        { did: identifier.did, signer, alg },
         { removeOriginalFields: args.removeOriginalFields },
       )
       //FIXME: flagging this as a potential privacy leak.
@@ -572,7 +578,6 @@ export class CredentialIssuer implements IAgentPlugin {
       //FIXME: `args` should allow picking a key or key type
       const key = identifier.keys.find((k) => k.type === 'Secp256k1' || k.type === 'Ed25519')
       if (!key) throw Error('No signing key for ' + identifier.did)
-
       //------------------------- BEGIN JSON_LD INSERT
       let verifiableCredential;
       if (args.proofFormat === 'lds') {
@@ -584,15 +589,14 @@ export class CredentialIssuer implements IAgentPlugin {
         const keyPayload = await context.agent.keyManagerGet({ kid: key.kid })
         verifiableCredential = await issueLDVerifiableCredential(credential, keyPayload, identifier, context)
       } else {
-        //------------------------- END JSON_LD INSERT
-        //FIXME: Throw an `unsupported_format` error if the `args.proofFormat` is not `jwt`
-        const signer = (data: string | Uint8Array) => context.agent.keyManagerSignJWT({ kid: key.kid, data })
 
+        //FIXME: Throw an `unsupported_format` error if the `args.proofFormat` is not `jwt`
         debug('Signing VC with', identifier.did)
         let alg = 'ES256K'
         if (key.type === 'Ed25519') {
           alg = 'EdDSA'
         }
+        const signer = wrapSigner(context, key, alg)
         const jwt = await createVerifiableCredentialJwt(
           credential,
           { did: identifier.did, signer, alg },
@@ -600,9 +604,8 @@ export class CredentialIssuer implements IAgentPlugin {
         )
         //FIXME: flagging this as a potential privacy leak.
         debug(jwt)
-        verifiableCredential = normalizeCredential(jwt)
+        const verifiableCredential = normalizeCredential(jwt)
       }
-
       if (args.save) {
         await context.agent.dataStoreSaveVerifiableCredential({ verifiableCredential })
       }
@@ -676,5 +679,16 @@ export class CredentialIssuer implements IAgentPlugin {
     console.log(`Error verifying LD Verifiable Presentation`)
     console.log(JSON.stringify(result, null, 2));
     throw Error('Error verifying LD Verifiable Presentation')
+  }
+}
+
+function wrapSigner(
+  context: IAgentContext<Pick<IKeyManager, 'keyManagerSign'>>,
+  key: IKey,
+  algorithm?: string,
+) {
+  return async (data: string | Uint8Array) => {
+    const result = await context.agent.keyManagerSign({ keyRef: key.kid, data: <string>data, algorithm })
+    return result
   }
 }

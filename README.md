@@ -2,7 +2,7 @@
 [![codecov](https://codecov.io/gh/uport-project/veramo/branch/next/graph/badge.svg)](https://codecov.io/gh/uport-project/veramo)
 
 # Veramo
-Veramo is a JavaScript Framework for Verifiable Data that was designed from the ground up to be flexible and modular which makes it highly scalable. Create an agent, add plugins, run on server or mobile. You can also expose your agent over REST.
+Veramo is a JavaScript Framework for Verifiable Data that was designed from the ground up to be flexible and modular which makes it highly scalable. Create an agent, add plugins, run on server or mobile. You can also control your agent over REST.
 
 Veramo runs on Node, Browsers, and React Native straight out of the box. Save time by using the same API across all platforms.
 

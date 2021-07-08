@@ -47,8 +47,8 @@ sdr
           if (!val || !val.startsWith('did:')) {
             return "Subject DID does not start with 'did:'..."
           }
-          return true;
-        }
+          return true
+        },
       },
       {
         type: 'input',
@@ -303,13 +303,13 @@ sdr
         name: item.claimType + ' ' + (item.essential ? '(essential)' : '') + item.reason,
         choices: item.credentials.map((c) => ({
           name:
-            c.credentialSubject[item.claimType] +
+            c.verifiableCredential.credentialSubject[item.claimType] +
             ' (' +
-            c.type.join(',') +
+            c.verifiableCredential.type.join(',') +
             ') issued by: ' +
-            c.issuer.id +
+            c.verifiableCredential.issuer.id +
             ' ' +
-            shortDate(c.issuanceDate) +
+            shortDate(c.verifiableCredential.issuanceDate) +
             ' ago',
           value: c,
         })),

@@ -24,6 +24,7 @@ export {
   UniqueVerifiableCredential,
 } from './data-store-orm'
 export * from './types'
+export { ProfileDiscoveryProvider } from './did-discovery-provider'
 import { Key, KeyType } from './entities/key'
 import { Identifier } from './entities/identifier'
 import { Claim } from './entities/claim'

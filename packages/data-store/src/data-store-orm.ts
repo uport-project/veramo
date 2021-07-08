@@ -95,18 +95,15 @@ export class DataStoreORM implements IAgentPlugin {
       dataStoreORMGetIdentifiersCount: this.dataStoreORMGetIdentifiersCount.bind(this),
       dataStoreORMGetMessages: this.dataStoreORMGetMessages.bind(this),
       dataStoreORMGetMessagesCount: this.dataStoreORMGetMessagesCount.bind(this),
-      dataStoreORMGetVerifiableCredentialsByClaims: this.dataStoreORMGetVerifiableCredentialsByClaims.bind(
-        this,
-      ),
-      dataStoreORMGetVerifiableCredentialsByClaimsCount: this.dataStoreORMGetVerifiableCredentialsByClaimsCount.bind(
-        this,
-      ),
+      dataStoreORMGetVerifiableCredentialsByClaims:
+        this.dataStoreORMGetVerifiableCredentialsByClaims.bind(this),
+      dataStoreORMGetVerifiableCredentialsByClaimsCount:
+        this.dataStoreORMGetVerifiableCredentialsByClaimsCount.bind(this),
       dataStoreORMGetVerifiableCredentials: this.dataStoreORMGetVerifiableCredentials.bind(this),
       dataStoreORMGetVerifiableCredentialsCount: this.dataStoreORMGetVerifiableCredentialsCount.bind(this),
       dataStoreORMGetVerifiablePresentations: this.dataStoreORMGetVerifiablePresentations.bind(this),
-      dataStoreORMGetVerifiablePresentationsCount: this.dataStoreORMGetVerifiablePresentationsCount.bind(
-        this,
-      ),
+      dataStoreORMGetVerifiablePresentationsCount:
+        this.dataStoreORMGetVerifiablePresentationsCount.bind(this),
     }
   }
 

@@ -16,7 +16,7 @@ export class MemoryKeyStore extends AbstractKeyStore {
   }
 
   async import(args: IKey) {
-    this.keys[args.kid] = {...args}
+    this.keys[args.kid] = { ...args }
     return true
   }
 }

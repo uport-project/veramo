@@ -47,6 +47,7 @@ export class DIDStore extends AbstractDIDStore {
         type: k.type,
         kms: k.kms,
         publicKeyHex: k.publicKeyHex,
+        meta: k.meta,
       })),
     }
     if (identifier.alias) {

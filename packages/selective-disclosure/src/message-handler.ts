@@ -25,10 +25,7 @@ export class SdrMessageHandler extends AbstractMessageHandler {
   async handle(message: Message, context: IAgentContext<IMessageHandler>): Promise<Message> {
     const meta = message.getLastMetaData()
 
-    if (
-      message.data.type == MessageTypes.sdr &&
-      message.data.claims
-    ) {
+    if (message?.data?.type == MessageTypes.sdr && message?.data?.claims) {
       debug('Message type is', MessageTypes.sdr)
 
       message.id = blake2bHex(message.raw)

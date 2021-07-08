@@ -9,20 +9,26 @@
     "extract-api": "yarn veramo dev extract-api"
   },
   "dependencies": {
+    "@ethersproject/abstract-provider": "^5.1.0",
+    "@ethersproject/abstract-signer": "^5.1.0",
+    "@ethersproject/bytes": "^5.1.0",
+    "@ethersproject/random": "^5.3.0",
+    "@ethersproject/signing-key": "^5.3.0",
+    "@ethersproject/strings": "^5.1.0",
+    "@ethersproject/transactions": "^5.1.1",
+    "@ethersproject/wallet": "^5.1.0",
+    "@stablelib/ed25519": "^1.0.2",
+    "@stablelib/nacl": "^1.0.2",
     "@veramo/core": "^1.2.0",
     "@veramo/key-manager": "^1.2.0",
     "base-58": "^0.0.1",
     "debug": "^4.1.1",
-    "did-jwt": "5.2.0",
-    "elliptic": "6.5.4",
-    "ethjs-signer": "^0.1.1",
-    "libsodium-wrappers": "^0.7.8"
+    "did-jwt": "5.6.2",
+    "uint8arrays": "^2.1.5"
   },
   "devDependencies": {
-    "@types/debug": "4.1.5",
-    "@types/ethjs-signer": "0.1.0",
-    "@types/libsodium-wrappers": "0.7.9",
-    "typescript": "4.2.4"
+    "@types/debug": "4.1.6",
+    "typescript": "4.3.5"
   },
   "files": [
     "build/**/*",

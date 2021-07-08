@@ -38,7 +38,7 @@ export interface IIdentifier {
  * Cryptographic key type
  * @public
  */
-export type TKeyType = 'Ed25519' | 'Secp256k1'
+export type TKeyType = 'Ed25519' | 'Secp256k1' | 'X25519'
 
 /**
  * Cryptographic key
@@ -71,9 +71,14 @@ export interface IKey {
   privateKeyHex?: string
 
   /**
-   * Optional. Key metadata. Can be used to store auth data to access remote kms
+   * Optional. Key metadata. This should be used to determine which algorithms are supported.
    */
-  meta?: object | null
+  meta?: KeyMetadata | null
+}
+
+export interface KeyMetadata {
+  algorithms?: string[]
+  [x: string]: any
 }
 
 /**

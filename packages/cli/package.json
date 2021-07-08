@@ -1,7 +1,7 @@
 {
   "name": "@veramo/cli",
   "description": "Veramo command line application.",
-  "version": "1.2.1",
+  "version": "1.2.2",
   "main": "build/cli.js",
   "types": "build/cli.d.ts",
   "bin": {
@@ -10,18 +10,19 @@
   "scripts": {
     "build": "tsc",
     "watch": "tsc -b --watch",
-    "update-veramo-next": "yarn add @veramo/core@next @veramo/remote-client@next @veramo/remote-server@next @veramo/did-provider-key@next @veramo/did-resolver@next @veramo/did-jwt@next @veramo/credential-w3c@next @veramo/did-provider-ethr@next @veramo/did-provider-web@next @veramo/did-comm@next @veramo/kms-local@next @veramo/selective-disclosure@next @veramo/data-store@next @veramo/key-manager@next @veramo/message-handler@next @veramo/did-manager@next @veramo/url-handler@next",
-    "update-veramo-latest": "yarn add @veramo/core@latest @veramo/remote-client@latest @veramo/remote-server@latest @veramo/did-provider-key@latest @veramo/did-resolver@latest @veramo/did-jwt@latest @veramo/credential-w3c@latest @veramo/did-provider-ethr@latest @veramo/did-provider-web@latest @veramo/did-comm@latest @veramo/kms-local@latest @veramo/selective-disclosure@latest @veramo/data-store@latest @veramo/key-manager@latest @veramo/message-handler@latest @veramo/did-manager@latest @veramo/url-handler@latest"
+    "update-veramo-next": "yarn add @veramo/core@next @veramo/discovery@next @veramo/remote-client@next @veramo/remote-server@next @veramo/did-provider-key@next @veramo/did-resolver@next @veramo/did-jwt@next @veramo/credential-w3c@next @veramo/did-provider-ethr@next @veramo/did-provider-web@next @veramo/did-comm@next @veramo/kms-local@next @veramo/selective-disclosure@next @veramo/data-store@next @veramo/key-manager@next @veramo/message-handler@next @veramo/did-manager@next @veramo/url-handler@next",
+    "update-veramo-latest": "yarn add @veramo/core@latest @veramo/discovery@latest @veramo/remote-client@latest @veramo/remote-server@latest @veramo/did-provider-key@latest @veramo/did-resolver@latest @veramo/did-jwt@latest @veramo/credential-w3c@latest @veramo/did-provider-ethr@latest @veramo/did-provider-web@latest @veramo/did-comm@latest @veramo/kms-local@latest @veramo/selective-disclosure@latest @veramo/data-store@latest @veramo/key-manager@latest @veramo/message-handler@latest @veramo/did-manager@latest @veramo/url-handler@latest"
   },
   "dependencies": {
-    "@microsoft/api-extractor": "7.15.1",
-    "@microsoft/api-extractor-model": "7.13.1",
+    "@microsoft/api-extractor": "7.17.1",
+    "@microsoft/api-extractor-model": "7.13.3",
     "@types/blessed": "^0.1.17",
     "@types/swagger-ui-express": "^4.1.2",
     "@veramo/core": "^1.2.0",
     "@veramo/credential-w3c": "^1.2.0",
     "@veramo/data-store": "^1.2.0",
     "@veramo/did-comm": "^1.2.0",
+    "@veramo/did-discovery": "^1.2.0",
     "@veramo/did-jwt": "^1.2.0",
     "@veramo/did-manager": "^1.2.0",
     "@veramo/did-provider-ethr": "^1.2.0",
@@ -43,8 +44,8 @@
     "date-fns": "^2.16.1",
     "debug": "^4.1.1",
     "did-resolver": "3.1.0",
-    "dotenv": "^9.0.0",
-    "ethr-did-resolver": "4.3.3",
+    "dotenv": "^10.0.0",
+    "ethr-did-resolver": "4.3.4",
     "express": "^4.17.1",
     "express-handlebars": "^5.2.0",
     "fuzzy": "^0.1.3",
@@ -62,20 +63,20 @@
     "qrcode-terminal": "^0.12.0",
     "sqlite3": "^5.0.0",
     "swagger-ui-express": "^4.1.5",
-    "ts-json-schema-generator": "^0.92.0",
-    "typeorm": "0.2.32",
+    "ts-json-schema-generator": "^0.94.0",
+    "typeorm": "0.2.34",
     "url-parse": "^1.5.1",
     "web-did-resolver": "2.0.4",
     "ws": "^7.4.1",
     "yaml": "^1.10.0"
   },
   "devDependencies": {
-    "@types/debug": "4.1.5",
-    "@types/inquirer": "7.3.1",
+    "@types/debug": "4.1.6",
+    "@types/inquirer": "7.3.2",
     "@types/node-fetch": "2.5.10",
     "@types/passport-http-bearer": "1.0.36",
-    "@types/ws": "7.4.2",
-    "typescript": "4.2.4"
+    "@types/ws": "7.4.6",
+    "typescript": "4.3.5"
   },
   "files": [
     "bin/**/*",

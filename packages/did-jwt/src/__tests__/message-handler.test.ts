@@ -80,6 +80,7 @@ describe('@veramo/did-jwt', () => {
           },
         }
       },
+      getDIDComponentById: jest.fn(),
     },
   }
 

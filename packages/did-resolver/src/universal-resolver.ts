@@ -16,7 +16,7 @@ export class UniversalResolver {
 
 /**
  * Creates a DIDResolver instance that can be used with `did-resolver`
- * 
+ *
  * @example
  * ```typescript
  * const uniResolver = getUniversalResolver()
@@ -26,7 +26,7 @@ export class UniversalResolver {
  *   elem: uniResolver
  * })
  * ```
- * 
+ *
  * @param url the URL for the universal resolver instance (See https://uniresolver.io )
  * @returns `DIDResolver`
  */
@@ -52,7 +52,7 @@ export function getUniversalResolver(
 
 /**
  * Creates a mapping of DID methods to a DIDResolver instance that can be used with `did-resolver`
- * 
+ *
  * @example
  * ```typescript
  * const uniResolver = getUniversalResolverFor(['web', 'key', 'elem'])
@@ -61,7 +61,7 @@ export function getUniversalResolver(
  *   // other resolvers
  * })
  * ```
- * 
+ *
  * @param methods an array of DID methods that should be resolved by this universal resolver
  * @param url the URL for the universal resolver instance (See https://uniresolver.io )
  * @returns `Record<string, DIDResolver>` a mapping of the given methods to an instance of `DIDResolver`

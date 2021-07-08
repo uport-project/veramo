@@ -9,6 +9,7 @@
     { "path": "../credential-w3c" },
     { "path": "../data-store" },
     { "path": "../did-comm" },
+    { "path": "../did-discovery" },
     { "path": "../did-jwt" },
     { "path": "../did-manager" },
     { "path": "../did-provider-ethr" },

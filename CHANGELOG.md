@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.2](https://github.com/uport-project/veramo/compare/v1.2.1...v1.2.2) (2021-05-18)
+
+
+### Bug Fixes
+
+* **cli:** print entire JSON tree resulting from DID resolution ([#524](https://github.com/uport-project/veramo/issues/524)) ([e83d33c](https://github.com/uport-project/veramo/commit/e83d33cc0687a100587a439bdc8b8ed1219b9c24)), closes [#523](https://github.com/uport-project/veramo/issues/523)
+
+
+
+
+
 ## [1.2.1](https://github.com/uport-project/veramo/compare/v1.2.0...v1.2.1) (2021-05-03)
 
 

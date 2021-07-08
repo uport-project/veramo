@@ -1,5 +1,4 @@
 import blessed from 'blessed'
-import { IMessage } from '@veramo/core'
 import { ConfiguredAgent } from '../setup'
 import { styles } from './styles'
 

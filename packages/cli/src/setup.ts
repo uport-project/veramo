@@ -5,6 +5,8 @@ import { ICredentialIssuer } from '@veramo/credential-w3c'
 import { ISelectiveDisclosure } from '@veramo/selective-disclosure'
 import { IDIDComm } from '@veramo/did-comm'
 import { IDataStoreORM } from '@veramo/data-store'
+import { IDIDDiscovery } from '@veramo/did-discovery'
+
 const fs = require('fs')
 import { createAgentFromConfig } from './lib/agentCreator'
 
@@ -32,7 +34,8 @@ export type EnabledInterfaces = IDIDManager &
   IMessageHandler &
   IDIDComm &
   ICredentialIssuer &
-  ISelectiveDisclosure
+  ISelectiveDisclosure &
+  IDIDDiscovery
 
 export type ConfiguredAgent = TAgent<EnabledInterfaces>
 

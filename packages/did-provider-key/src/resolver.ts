@@ -1,5 +1,4 @@
 import { resolver } from '@transmute/did-key.js'
-import { DIDDocument } from '@veramo/core'
 import { DIDResolutionOptions, DIDResolutionResult, DIDResolver, ParsedDID, Resolvable } from 'did-resolver'
 
 const resolve: DIDResolver = async (

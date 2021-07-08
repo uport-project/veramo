@@ -1,5 +1,4 @@
 import blessed, { Widgets } from 'blessed'
-import { IMessage, VerifiableCredential } from '@veramo/core'
 import { UniqueVerifiableCredential } from '@veramo/data-store'
 import { shortDate, shortDid } from './utils'
 import { ConfiguredAgent } from '../setup'

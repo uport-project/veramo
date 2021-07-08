@@ -13,7 +13,7 @@ export const getOpenApiSchema = (
   const paths: OpenAPIV3.PathsObject = {}
 
   const schemas = {}
-  const xMethods: Record<string,any> = {}
+  const xMethods: Record<string, any> = {}
 
   for (const method of exposedMethods) {
     const pathItemObject: OpenAPIV3.PathItemObject = {
@@ -52,7 +52,7 @@ export const getOpenApiSchema = (
     xMethods[method] = agentSchema.components.methods[method]
   }
 
-  const openApi: OpenAPIV3.Document & {'x-methods'?: Record<string, any>} = {
+  const openApi: OpenAPIV3.Document & { 'x-methods'?: Record<string, any> } = {
     openapi: '3.0.0',
     info: {
       title: name || 'DID Agent',

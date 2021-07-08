@@ -17,7 +17,7 @@
           "required": [
             "didUrl"
           ],
-          "description": "Input arguments for {@link IResolver.resolveDid | resolveDid}"
+          "description": "Input arguments for  {@link  IResolver.resolveDid | resolveDid }"
         },
         "DIDResolutionOptions": {
           "type": "object",
@@ -349,7 +349,7 @@
               "description": "Key Management System"
             },
             "meta": {
-              "type": "object",
+              "$ref": "#/components/schemas/KeyMetadata",
               "description": "Optional. Key meta data"
             }
           },
@@ -357,15 +357,27 @@
             "type",
             "kms"
           ],
-          "description": "Input arguments for {@link IKeyManager.keyManagerCreate | keyManagerCreate}"
+          "description": "Input arguments for  {@link  IKeyManager.keyManagerCreate | keyManagerCreate }"
         },
         "TKeyType": {
           "type": "string",
           "enum": [
             "Ed25519",
-            "Secp256k1"
+            "Secp256k1",
+            "X25519"
           ],
           "description": "Cryptographic key type"
+        },
+        "KeyMetadata": {
+          "type": "object",
+          "properties": {
+            "algorithms": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
         },
         "IKey": {
           "type": "object",
@@ -393,13 +405,13 @@
             "meta": {
               "anyOf": [
                 {
-                  "type": "object"
+                  "$ref": "#/components/schemas/KeyMetadata"
                 },
                 {
                   "type": "null"
                 }
               ],
-              "description": "Optional. Key metadata. Can be used to store auth data to access remote kms"
+              "description": "Optional. Key metadata. This should be used to determine which algorithms are supported."
             }
           },
           "required": [
@@ -426,7 +438,7 @@
             "kid",
             "data"
           ],
-          "description": "Input arguments for {@link IKeyManager.keyManagerDecryptJWE | keyManagerDecryptJWE}"
+          "description": "Input arguments for  {@link  IKeyManager.keyManagerDecryptJWE | keyManagerDecryptJWE }"
         },
         "IKeyManagerDeleteArgs": {
           "type": "object",
@@ -439,7 +451,7 @@
           "required": [
             "kid"
           ],
-          "description": "Input arguments for {@link IKeyManager.keyManagerDelete | keyManagerDelete}"
+          "description": "Input arguments for  {@link  IKeyManager.keyManagerDelete | keyManagerDelete }"
         },
         "IKeyManagerEncryptJWEArgs": {
           "type": "object",
@@ -470,13 +482,13 @@
                 "meta": {
                   "anyOf": [
                     {
-                      "type": "object"
+                      "$ref": "#/components/schemas/KeyMetadata"
                     },
                     {
                       "type": "null"
                     }
                   ],
-                  "description": "Optional. Key metadata. Can be used to store auth data to access remote kms"
+                  "description": "Optional. Key metadata. This should be used to determine which algorithms are supported."
                 }
               },
               "required": [
@@ -496,7 +508,7 @@
             "to",
             "data"
           ],
-          "description": "Input arguments for {@link IKeyManager.keyManagerEncryptJWE | keyManagerEncryptJWE}"
+          "description": "Input arguments for  {@link  IKeyManager.keyManagerEncryptJWE | keyManagerEncryptJWE }"
         },
         "IKeyManagerGetArgs": {
           "type": "object",
@@ -509,7 +521,71 @@
           "required": [
             "kid"
           ],
-          "description": "Input arguments for {@link IKeyManager.keyManagerGet | keyManagerGet}"
+          "description": "Input arguments for  {@link  IKeyManager.keyManagerGet | keyManagerGet }"
+        },
+        "IKeyManagerSharedSecretArgs": {
+          "type": "object",
+          "properties": {
+            "secretKeyRef": {
+              "type": "string",
+              "description": "The secret key handle (`kid`) as returned by  {@link  IKeyManager.keyManagerCreate | keyManagerCreate }"
+            },
+            "publicKey": {
+              "type": "object",
+              "properties": {
+                "publicKeyHex": {
+                  "type": "string",
+                  "description": "Public key"
+                },
+                "type": {
+                  "$ref": "#/components/schemas/TKeyType",
+                  "description": "Key type"
+                }
+              },
+              "required": [
+                "publicKeyHex",
+                "type"
+              ],
+              "description": "The public key of the other party. The `type` of key MUST be compatible with the type referenced by `secretKeyRef`"
+            }
+          },
+          "required": [
+            "secretKeyRef",
+            "publicKey"
+          ],
+          "description": "Input arguments for  {@link  IKeyManager.keyManagerSharedSecret | keyManagerSharedSecret }"
+        },
+        "IKeyManagerSignArgs": {
+          "type": "object",
+          "properties": {
+            "keyRef": {
+              "type": "string",
+              "description": "The key handle, as returned during `keyManagerCreateKey`"
+            },
+            "algorithm": {
+              "type": "string",
+              "description": "The algorithm to use for signing. This must be one of the algorithms supported by the KMS for this key type.\n\nThe algorithm used here should match one of the names listed in `IKey.meta.algorithms`"
+            },
+            "data": {
+              "type": "string",
+              "description": "Data to sign"
+            },
+            "encoding": {
+              "type": "string",
+              "enum": [
+                "utf-8",
+                "base16",
+                "base64",
+                "hex"
+              ],
+              "description": "If the data is a \"string\" then you can specify which encoding is used. Default is \"utf-8\""
+            }
+          },
+          "required": [
+            "keyRef",
+            "data"
+          ],
+          "description": "Input arguments for  {@link  IKeyManager.keyManagerSign | keyManagerSign }"
         },
         "IKeyManagerSignEthTXArgs": {
           "type": "object",
@@ -527,7 +603,7 @@
             "kid",
             "transaction"
           ],
-          "description": "Input arguments for {@link IKeyManager.keyManagerSignEthTX | keyManagerSignEthTX}"
+          "description": "Input arguments for  {@link  IKeyManager.keyManagerSignEthTX | keyManagerSignEthTX }"
         },
         "IKeyManagerSignJWTArgs": {
           "type": "object",
@@ -592,7 +668,7 @@
             "kid",
             "data"
           ],
-          "description": "Input arguments for {@link IKeyManager.keyManagerSignJWT | keyManagerSignJWT}"
+          "description": "Input arguments for  {@link  IKeyManager.keyManagerSignJWT | keyManagerSignJWT }"
         }
       },
       "methods": {
@@ -662,6 +738,24 @@
             "type": "boolean"
           }
         },
+        "keyManagerSharedSecret": {
+          "description": "Compute a shared secret with the public key of another party.",
+          "arguments": {
+            "$ref": "#/components/schemas/IKeyManagerSharedSecretArgs"
+          },
+          "returnType": {
+            "type": "string"
+          }
+        },
+        "keyManagerSign": {
+          "description": "Generates a signature according to the algorithm specified.",
+          "arguments": {
+            "$ref": "#/components/schemas/IKeyManagerSignArgs"
+          },
+          "returnType": {
+            "type": "string"
+          }
+        },
         "keyManagerSignEthTX": {
           "description": "Signs Ethereum transaction",
           "arguments": {
@@ -706,7 +800,7 @@
             "did",
             "key"
           ],
-          "description": "Input arguments for {@link IDIDManager.didManagerAddKey | didManagerAddKey}"
+          "description": "Input arguments for  {@link  IDIDManager.didManagerAddKey | didManagerAddKey }"
         },
         "IKey": {
           "type": "object",
@@ -734,13 +828,13 @@
             "meta": {
               "anyOf": [
                 {
-                  "type": "object"
+                  "$ref": "#/components/schemas/KeyMetadata"
                 },
                 {
                   "type": "null"
                 }
               ],
-              "description": "Optional. Key metadata. Can be used to store auth data to access remote kms"
+              "description": "Optional. Key metadata. This should be used to determine which algorithms are supported."
             }
           },
           "required": [
@@ -755,9 +849,21 @@
           "type": "string",
           "enum": [
             "Ed25519",
-            "Secp256k1"
+            "Secp256k1",
+            "X25519"
           ],
           "description": "Cryptographic key type"
+        },
+        "KeyMetadata": {
+          "type": "object",
+          "properties": {
+            "algorithms": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
         },
         "IDIDManagerAddServiceArgs": {
           "type": "object",
@@ -779,7 +885,7 @@
             "did",
             "service"
           ],
-          "description": "Input arguments for {@link IDIDManager.didManagerAddService | didManagerAddService}"
+          "description": "Input arguments for  {@link  IDIDManager.didManagerAddService | didManagerAddService }"
         },
         "IService": {
           "type": "object",
@@ -828,7 +934,7 @@
               "description": "Optional. Identifier provider specific options"
             }
           },
-          "description": "Input arguments for {@link IDIDManager.didManagerCreate | didManagerCreate}"
+          "description": "Input arguments for  {@link  IDIDManager.didManagerCreate | didManagerCreate }"
         },
         "IIdentifier": {
           "type": "object",
@@ -883,7 +989,7 @@
           "required": [
             "did"
           ],
-          "description": "Input arguments for {@link IDIDManager.didManagerDelete | didManagerDelete}"
+          "description": "Input arguments for  {@link  IDIDManager.didManagerDelete | didManagerDelete }"
         },
         "IDIDManagerFindArgs": {
           "type": "object",
@@ -897,7 +1003,7 @@
               "description": "Optional. Provider"
             }
           },
-          "description": "Input arguments for {@link IDIDManager.didManagerFind | didManagerFind}"
+          "description": "Input arguments for  {@link  IDIDManager.didManagerFind | didManagerFind }"
         },
         "IDIDManagerGetArgs": {
           "type": "object",
@@ -910,7 +1016,7 @@
           "required": [
             "did"
           ],
-          "description": "Input arguments for {@link IDIDManager.didManagerGet | didManagerGet}"
+          "description": "Input arguments for  {@link  IDIDManager.didManagerGet | didManagerGet }"
         },
         "IDIDManagerGetByAliasArgs": {
           "type": "object",
@@ -927,7 +1033,7 @@
           "required": [
             "alias"
           ],
-          "description": "Input arguments for {@link IDIDManager.didManagerGetByAlias | didManagerGetByAlias}"
+          "description": "Input arguments for  {@link  IDIDManager.didManagerGetByAlias | didManagerGetByAlias }"
         },
         "IDIDManagerGetOrCreateArgs": {
           "type": "object",
@@ -952,7 +1058,7 @@
           "required": [
             "alias"
           ],
-          "description": "Input arguments for {@link IDIDManager.didManagerGetOrCreate | didManagerGetOrCreate}"
+          "description": "Input arguments for  {@link  IDIDManager.didManagerGetOrCreate | didManagerGetOrCreate }"
         },
         "IDIDManagerRemoveKeyArgs": {
           "type": "object",
@@ -974,7 +1080,7 @@
             "did",
             "kid"
           ],
-          "description": "Input arguments for {@link IDIDManager.didManagerRemoveKey | didManagerRemoveKey}"
+          "description": "Input arguments for  {@link  IDIDManager.didManagerRemoveKey | didManagerRemoveKey }"
         },
         "IDIDManagerRemoveServiceArgs": {
           "type": "object",
@@ -996,7 +1102,7 @@
             "did",
             "id"
           ],
-          "description": "Input arguments for {@link IDIDManager.didManagerRemoveService | didManagerRemoveService}"
+          "description": "Input arguments for  {@link  IDIDManager.didManagerRemoveService | didManagerRemoveService }"
         },
         "IDIDManagerSetAliasArgs": {
           "type": "object",
@@ -1014,7 +1120,7 @@
             "did",
             "alias"
           ],
-          "description": "Input arguments for {@link IDIDManager.didManagerSetAlias | didManagerSetAlias}"
+          "description": "Input arguments for  {@link  IDIDManager.didManagerSetAlias | didManagerSetAlias }"
         }
       },
       "methods": {
@@ -1158,7 +1264,7 @@
           "required": [
             "id"
           ],
-          "description": "Input arguments for {@link IDataStore.dataStoreGetMessage | dataStoreGetMessage}"
+          "description": "Input arguments for  {@link  IDataStore.dataStoreGetMessage | dataStoreGetMessage }"
         },
         "IMessage": {
           "type": "object",
@@ -1344,7 +1450,7 @@
             "credentialSubject",
             "proof"
           ],
-          "description": "Verifiable Credential {@link https://github.com/decentralized-identifier/did-jwt-vc}"
+          "description": "Verifiable Credential  {@link  https://github.com/decentralized-identifier/did-jwt-vc }"
         },
         "VerifiablePresentation": {
           "type": "object",
@@ -1402,7 +1508,7 @@
             "verifiableCredential",
             "proof"
           ],
-          "description": "Verifiable Presentation {@link https://github.com/decentralized-identifier/did-jwt-vc}"
+          "description": "Verifiable Presentation  {@link  https://github.com/decentralized-identifier/did-jwt-vc }"
         },
         "IDataStoreGetVerifiableCredentialArgs": {
           "type": "object",
@@ -1415,7 +1521,7 @@
           "required": [
             "hash"
           ],
-          "description": "Input arguments for {@link IDataStore.dataStoreGetVerifiableCredential | dataStoreGetVerifiableCredential}"
+          "description": "Input arguments for  {@link  IDataStore.dataStoreGetVerifiableCredential | dataStoreGetVerifiableCredential }"
         },
         "IDataStoreGetVerifiablePresentationArgs": {
           "type": "object",
@@ -1428,7 +1534,7 @@
           "required": [
             "hash"
           ],
-          "description": "Input arguments for {@link IDataStore.dataStoreGetVerifiablePresentation | dataStoreGetVerifiablePresentation}"
+          "description": "Input arguments for  {@link  IDataStore.dataStoreGetVerifiablePresentation | dataStoreGetVerifiablePresentation }"
         },
         "IDataStoreSaveMessageArgs": {
           "type": "object",
@@ -1441,7 +1547,7 @@
           "required": [
             "message"
           ],
-          "description": "Input arguments for {@link IDataStore.dataStoreSaveMessage | dataStoreSaveMessage}"
+          "description": "Input arguments for  {@link  IDataStore.dataStoreSaveMessage | dataStoreSaveMessage }"
         },
         "IDataStoreSaveVerifiableCredentialArgs": {
           "type": "object",
@@ -1454,7 +1560,7 @@
           "required": [
             "verifiableCredential"
           ],
-          "description": "Input arguments for {@link IDataStore.dataStoreSaveVerifiableCredential | dataStoreSaveVerifiableCredential}"
+          "description": "Input arguments for  {@link  IDataStore.dataStoreSaveVerifiableCredential | dataStoreSaveVerifiableCredential }"
         },
         "IDataStoreSaveVerifiablePresentationArgs": {
           "type": "object",
@@ -1467,7 +1573,7 @@
           "required": [
             "verifiablePresentation"
           ],
-          "description": "Input arguments for {@link IDataStore.dataStoreSaveVerifiablePresentation | dataStoreSaveVerifiablePresentation}"
+          "description": "Input arguments for  {@link  IDataStore.dataStoreSaveVerifiablePresentation | dataStoreSaveVerifiablePresentation }"
         }
       },
       "methods": {
@@ -1547,13 +1653,13 @@
             },
             "save": {
               "type": "boolean",
-              "description": "Optional. If set to `true`, the message will be saved using {@link IDataStore.dataStoreSaveMessage | dataStoreSaveMessage}"
+              "description": "Optional. If set to `true`, the message will be saved using  {@link  IDataStore.dataStoreSaveMessage | dataStoreSaveMessage }"
             }
           },
           "required": [
             "raw"
           ],
-          "description": "Input arguments for {@link IMessageHandler.handleMessage | handleMessage}"
+          "description": "Input arguments for  {@link  IMessageHandler.handleMessage | handleMessage }"
         },
         "IMetaData": {
           "type": "object",
@@ -1739,7 +1845,7 @@
             "credentialSubject",
             "proof"
           ],
-          "description": "Verifiable Credential {@link https://github.com/decentralized-identifier/did-jwt-vc}"
+          "description": "Verifiable Credential  {@link  https://github.com/decentralized-identifier/did-jwt-vc }"
         },
         "VerifiablePresentation": {
           "type": "object",
@@ -1797,7 +1903,7 @@
             "verifiableCredential",
             "proof"
           ],
-          "description": "Verifiable Presentation {@link https://github.com/decentralized-identifier/did-jwt-vc}"
+          "description": "Verifiable Presentation  {@link  https://github.com/decentralized-identifier/did-jwt-vc }"
         }
       },
       "methods": {

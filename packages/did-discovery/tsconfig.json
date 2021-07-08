@@ -5,5 +5,8 @@
     "outDir": "build",
     "declarationDir": "build"
   },
-  "references": [{ "path": "../core" }, { "path": "../key-manager" }]
+  "references": [
+    { "path": "../core" },
+    { "path": "../data-store" },
+  ]
 }

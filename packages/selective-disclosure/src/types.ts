@@ -3,10 +3,9 @@ import {
   IDIDManager,
   IKeyManager,
   IPluginMethodMap,
-  VerifiableCredential,
   VerifiablePresentation,
 } from '@veramo/core'
-import { IDataStoreORM } from '@veramo/data-store'
+import { IDataStoreORM, UniqueVerifiableCredential } from '@veramo/data-store'
 import { ICredentialIssuer } from '@veramo/credential-w3c'
 
 /**
@@ -113,7 +112,7 @@ export interface ICredentialRequestInput {
  * @beta
  */
 export interface ICredentialsForSdr extends ICredentialRequestInput {
-  credentials: VerifiableCredential[]
+  credentials: UniqueVerifiableCredential[]
 }
 
 /**

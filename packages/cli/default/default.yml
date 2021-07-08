@@ -13,6 +13,7 @@ constants:
     - keyManagerImport
     - keyManagerEncryptJWE
     - keyManagerDecryptJWE
+    - keyManagerSign
     - keyManagerSignJWT
     - keyManagerSignEthTX
     - didManagerGetProviders
@@ -27,6 +28,7 @@ constants:
     - didManagerAddService
     - didManagerRemoveService
     - resolveDid
+    - discoverDid
     - dataStoreGetMessage
     - dataStoreSaveMessage
     - dataStoreGetVerifiableCredential
@@ -267,6 +269,13 @@ didManager:
           $args:
             - defaultKms: local
 
+didDiscovery:
+  $require: '@veramo/did-discovery#DIDDiscovery'
+  $args:
+    - providers:
+        - $require: '@veramo/did-manager#AliasDiscoveryProvider'
+        - $require: '@veramo/data-store#ProfileDiscoveryProvider'
+
 # Agent
 agent:
   $require: '@veramo/core#Agent'
@@ -276,6 +285,7 @@ agent:
         - $ref: /keyManager
         - $ref: /didManager
         - $ref: /didResolver
+        - $ref: /didDiscovery
         - $ref: /messageHandler
         - $require: '@veramo/did-comm#DIDComm'
         - $require: '@veramo/credential-w3c#CredentialIssuer'

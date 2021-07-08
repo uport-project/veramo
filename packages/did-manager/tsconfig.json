@@ -5,5 +5,5 @@
     "outDir": "build",
     "declarationDir": "build"
   },
-  "references": [{ "path": "../core" }]
+  "references": [{ "path": "../core" }, { "path": "../did-discovery" }]
 }

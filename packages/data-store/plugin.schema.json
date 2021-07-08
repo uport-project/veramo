@@ -151,13 +151,13 @@
             "meta": {
               "anyOf": [
                 {
-                  "type": "object"
+                  "$ref": "#/components/schemas/KeyMetadata"
                 },
                 {
                   "type": "null"
                 }
               ],
-              "description": "Optional. Key metadata. Can be used to store auth data to access remote kms"
+              "description": "Optional. Key metadata. This should be used to determine which algorithms are supported."
             }
           },
           "required": [
@@ -172,9 +172,21 @@
           "type": "string",
           "enum": [
             "Ed25519",
-            "Secp256k1"
+            "Secp256k1",
+            "X25519"
           ],
           "description": "Cryptographic key type"
+        },
+        "KeyMetadata": {
+          "type": "object",
+          "properties": {
+            "algorithms": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
         },
         "IService": {
           "type": "object",
@@ -482,7 +494,7 @@
             "credentialSubject",
             "proof"
           ],
-          "description": "Verifiable Credential {@link https://github.com/decentralized-identifier/did-jwt-vc}"
+          "description": "Verifiable Credential  {@link  https://github.com/decentralized-identifier/did-jwt-vc }"
         },
         "VerifiablePresentation": {
           "type": "object",
@@ -540,7 +552,7 @@
             "verifiableCredential",
             "proof"
           ],
-          "description": "Verifiable Presentation {@link https://github.com/decentralized-identifier/did-jwt-vc}"
+          "description": "Verifiable Presentation  {@link  https://github.com/decentralized-identifier/did-jwt-vc }"
         },
         "FindCredentialsArgs": {
           "$ref": "#/components/schemas/FindArgs-TCredentialColumns"
