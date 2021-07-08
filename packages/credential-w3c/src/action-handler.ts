@@ -10,7 +10,7 @@ import {
   VerifiableCredential,
   VerifiablePresentation,
   IDataStore,
-  IKey,
+  IKey, IIdentifier,
 } from '@veramo/core'
 
 import {
@@ -26,7 +26,7 @@ const vc = require('vc-js');
 const { defaultDocumentLoader } = vc;
 const {extendContextLoader} = require('jsonld-signatures');
 const {EcdsaSecp256k1RecoveryMethod2020, EcdsaSecp256k1RecoverySignature2020} = require('EcdsaSecp256k1RecoverySignature2020')
-import {Ed25519Signature2018, Ed25519KeyPair} from '@transmute/ed25519-signature-2018'
+import {Ed25519Signature2018, Ed25519VerificationKey2018} from '@transmute/ed25519-signature-2018'
 const Base58 = require('base-58');
 // Start END LD Libraries
 
@@ -404,7 +404,7 @@ const getLDSigningSuite = (key: IKey, identifier: IIdentifier) => {
 
 
       suite = new Ed25519Signature2018({
-        key: new Ed25519KeyPair({
+        key: new Ed25519VerificationKey2018({
           id,
           controller,
           publicKeyBase58: Base58.encode(Buffer.from(key.publicKeyHex, 'hex')),
@@ -604,7 +604,7 @@ export class CredentialIssuer implements IAgentPlugin {
         )
         //FIXME: flagging this as a potential privacy leak.
         debug(jwt)
-        const verifiableCredential = normalizeCredential(jwt)
+        verifiableCredential = normalizeCredential(jwt)
       }
       if (args.save) {
         await context.agent.dataStoreSaveVerifiableCredential({ verifiableCredential })
