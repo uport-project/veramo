@@ -56,7 +56,7 @@
     "jsonpointer": "^4.1.0",
     "ngrok": "^4.0.0",
     "oas-resolver": "^2.5.3",
-    "openapi-types": "^8.0.0",
+    "openapi-types": "^9.0.0",
     "passport": "^0.4.1",
     "passport-http-bearer": "^1.0.1",
     "pg": "^8.6.0",
