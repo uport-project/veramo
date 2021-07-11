@@ -37,7 +37,7 @@
     "@veramo/selective-disclosure": "^1.2.0",
     "@veramo/url-handler": "^1.2.0",
     "blessed": "^0.1.81",
-    "commander": "^7.0.0",
+    "commander": "^8.0.0",
     "console-table-printer": "^2.8.2",
     "cors": "^2.8.5",
     "cross-fetch": "^3.1.4",
