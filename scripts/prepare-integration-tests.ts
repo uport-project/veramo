@@ -64,6 +64,8 @@ for (const packageName of Object.keys(agentPlugins)) {
   const generator = TJS.createGenerator({
     path: resolve('packages/' + packageName + '/src/index.ts'),
     encodeRefs: false,
+    // TODO: https://github.com/transmute-industries/vc.js/issues/60
+    skipTypeCheck: true
   })
 
   const apiModel: ApiModel = new ApiModel()

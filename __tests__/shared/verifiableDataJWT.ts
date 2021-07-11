@@ -11,7 +11,7 @@ export default (testContext: {
   setup: () => Promise<boolean>
   tearDown: () => Promise<boolean>
 }) => {
-  describe('creating Verifiable Credentials', () => {
+  describe('creating Verifiable Credentials in JWT', () => {
     let agent: ConfiguredAgent
     let identifier: IIdentifier
 
@@ -26,7 +26,7 @@ export default (testContext: {
       expect(identifier).toHaveProperty('did')
     })
 
-    it('should create verifiable credential', async () => {
+    it('should create verifiable credential in JWT', async () => {
       const verifiableCredential = await agent.createVerifiableCredential({
         credential: {
           issuer: { id: identifier.did },

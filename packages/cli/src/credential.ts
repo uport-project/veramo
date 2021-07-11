@@ -21,6 +21,15 @@ credential
     const answers = await inquirer.prompt([
       {
         type: 'list',
+        name: 'proofFormat',
+        choices: [
+          'jwt',
+          'lds'
+        ],
+        message: 'Credential proofFormat',
+      },
+      {
+        type: 'list',
         name: 'iss',
         choices: identifiers.map((item) => ({
           name: `${item.did} ${item.alias}`,
@@ -70,7 +79,10 @@ credential
 
     const credential: W3CCredential = {
       issuer: { id: answers.iss },
-      '@context': ['https://www.w3.org/2018/credentials/v1'],
+      '@context': [
+        'https://www.w3.org/2018/credentials/v1',
+        'https://veramo.io/contexts/profile/v1'
+      ],
       type: answers.type.split(','),
       issuanceDate: new Date().toISOString(),
       credentialSubject,
@@ -101,18 +113,27 @@ credential
     const verifiableCredential = await agent.createVerifiableCredential({
       save: true,
       credential,
-      proofFormat: 'jwt',
+      proofFormat: answers.proofFormat,
     })
 
     if (cmd.send) {
+      let body;
+      let type;
+      if (answers.proofFormat == 'jwt') {
+        body = verifiableCredential.proof.jwt
+        type = 'jwt'
+      } else {
+        body = verifiableCredential
+        type = 'w3c.vc'
+      }
       try {
         const message = await agent.sendMessageDIDCommAlpha1({
           save: true,
           data: {
             from: answers.iss,
             to: answers.sub,
-            type: 'jwt',
-            body: verifiableCredential.proof.jwt,
+            type,
+            body,
           },
         })
         console.dir(message, { depth: 10 })

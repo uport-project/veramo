@@ -1,0 +1,8 @@
+{
+  "@context": {
+      "@version": 1.1,
+      "@protected": true,
+      "Profile": "https://veramo.io/contexts/profile#Profile",
+      "name": "https://schema.org/name"
+  }
+}

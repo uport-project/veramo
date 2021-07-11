@@ -63,6 +63,10 @@ describe('@veramo/credential-w3c', () => {
           }
         }
       },
+      createVerifiableCredential: jest.fn(),
+      createVerifiablePresentation: jest.fn(),
+      verifyVerifiableCredential: jest.fn(),
+      verifyVerifiablePresentation: jest.fn(),
       getDIDComponentById: jest.fn(),
     },
   }

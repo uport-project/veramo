@@ -1,0 +1,21 @@
+{
+  "@context": [
+    {
+      "@version": 1.1
+    },
+    "https://www.w3.org/ns/did/v1",
+    {
+      "JsonWebKey2020": "https://w3id.org/security#JsonWebKey2020",
+      "Ed25519VerificationKey2018": "https://w3id.org/security#Ed25519VerificationKey2018",
+      "X25519KeyAgreementKey2019": "https://w3id.org/security#X25519KeyAgreementKey2019",
+
+      "publicKeyJwk": {
+        "@id": "https://w3id.org/security#publicKeyJwk",
+        "@type": "@json"
+      },
+      "publicKeyBase58": {
+        "@id": "https://w3id.org/security#publicKeyBase58"
+      }
+    }
+  ]
+}

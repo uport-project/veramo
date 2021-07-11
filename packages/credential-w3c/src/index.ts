@@ -13,7 +13,7 @@ export {
   ICredentialIssuer,
   ICreateVerifiableCredentialArgs,
   ICreateVerifiablePresentationArgs,
-  EncodingFormat,
+  ProofFormat,
 } from './action-handler'
 const schema = require('../plugin.schema.json')
 export { schema }

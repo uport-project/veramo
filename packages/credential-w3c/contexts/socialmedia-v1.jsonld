@@ -1,0 +1,7 @@
+{
+  "@context": {
+      "@version": 1.1,
+      "@protected": true,
+      "VerifableSocialMediaPosting": "https://veramo.io/contexts/socialmedia#VerifableSocialMediaPosting"
+  }
+}

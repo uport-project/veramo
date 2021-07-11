@@ -1,0 +1,8 @@
+{
+  "@context": {
+      "@version": 1.1,
+      "@protected": true,
+      "VerifiableKyc": "https://veramo.io/contexts/kyc#VerifiableKyc",
+      "name": "https://schema.org/name"
+  }
+}
